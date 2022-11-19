@@ -1,0 +1,63 @@
+{% with request.resolver_match.view_name as view_name %}
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand
+      {% if view_name  == "payments:item_list" %}
+        bg-primary
+        text-light
+      {% endif %}
+    " href="{% url 'payments:item_list'%}">RISHAT</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
+        </li>
+        {% if user.is_authenticated %}
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="accounts/logout"
+            >{{ user.username }}</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-primary" href="/accounts/logout">Logout</a>
+            </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link text-primary" href="/accounts/login">Login</a>
+          </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link
+            {% if view_name  == "payments:cart" %}
+              bg-primary
+              text-light
+            {% endif %}
+          " href="{% url 'payments:cart'%}"
+
+          >Cart</a
+            >
+          </li>
+        </ul>
+        <form method="POST" action="{% url 'payments:buy_from_cart'  %}">
+          {% csrf_token %}
+          <input
+            class="btn btn-primary"
+            type="submit"
+            value="Заказать из корзины"
+          />
+        </form>
+      </div>
+    </nav>
+{% endwith %}

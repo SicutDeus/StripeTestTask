@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% block title %}
+  <title>Купить {{ item.name }}</title>
+{% endblock %} {% block content %}
+  <div class="container">
+    <div class="row row-cols-1 row-cols-md-3 mb-3 text-center">
+      <div class="col"></div>
+      <div class="col">
+        <div class="card mb-4 shadow-sm">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">{{ item.name }}</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">
+              {% if item.currency == "usd" %}
+                $
+              {% else %}
+                ₽
+              {% endif %}
+              {{ item.price }}</h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              {{ item.description }}
+            </ul>
+            <form action="{% url 'payments:buy_item' item.pk %}" method="POST">
+              {% csrf_token %}
+              <button
+                href="{% url 'payments:buy_item' item.pk %}"
+                class="btn btn-lg btn-block btn-primary"
+                type="submit"
+                id="checkout-button"
+              >
+                {% if item.currency == "usd" %}
+                  Купить за {{ item.price }} долларов!
+                {% else %}
+                  Купить за {{ item.price }} рублей!
+                {% endif %}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card mb-4 shadow-sm"></div>
+      </div>
+{% endblock content %}
+</div>
+</div>

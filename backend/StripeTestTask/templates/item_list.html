@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% block title %}
+  <title>Items list</title>
+{% endblock title %} {% block content %}
+  <div class="card-group">
+    {% for item in object_list %}
+      <div class="card w-55">
+        <div class="card-body">
+          <h1>
+            <a href="{% url 'payments:item_detail' item.pk %}">{{ item.name }}</a>
+          </h1>
+          <p class="card-text">{{ item.description }}</p>
+          <h2 class="text-success">
+            {{ item.price }} {% if item.currency == "usd" %} $! {% endif %}
+            {% if item.currency == "rub" %} ₽! {% endif %}
+          </h2>
+          <h1>
+            {% if not iscart %} {% if item in cart %}
+              <form method="LINK">
+                <input
+                  class="btn btn-secondary"
+                  type="submit"
+                  value="Уже в корзине"
+                />
+              </form>
+            {% else %}
+              <form method="LINK" action="{% url 'payments:add_to_cart' item.pk %}">
+                <input
+                  class="btn btn-primary"
+                  type="submit"
+                  value="Добавить в корзину"
+                />
+              </form>
+            {% endif %} {% else%}
+              <form
+                method="LINK"
+                action="{% url 'payments:remove_from_cart' item.pk %}"
+              >
+                <input
+                  class="btn btn-primary"
+                  type="submit"
+                  value="Убрать из корзины"
+                />
+              </form>
+            {% endif%}
+          </h1>
+        </div>
+      </div>
+      </div>
+    {% endfor %} {% endblock content %}
