@@ -42,7 +42,7 @@ class CreateCheckoutSessionFromCartView(LoginRequiredMixin, View):
         return redirect(checkout_session.url)
 
 
-class CreateCheckoutSessionView(View):
+class CreateCheckoutSessionView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         item = Item.objects.get(id=self.kwargs['pk'])
         domain = 'http://127.0.0.1:8000'
@@ -68,7 +68,7 @@ class CreateCheckoutSessionView(View):
         return redirect(checkout_session.url)
 
 
-class ItemDetailView(DetailView):
+class ItemDetailView(LoginRequiredMixin, DetailView):
     model = Item
     template_name = 'detail.html'
 
@@ -80,7 +80,7 @@ class ItemDetailView(DetailView):
         return context
 
 
-class ItemListView(ListView):
+class ItemListView(LoginRequiredMixin, ListView):
     model = Item
     template_name = 'item_list.html'
 
