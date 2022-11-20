@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'payments.apps.PaymentsConfig',
     'accounts.apps.AccountsConfig',
+    'core.apps.CoreConfig',
 ]
 
 MIDDLEWARE = [
@@ -96,5 +97,10 @@ INTERNAL_IPS = [
 ]
 
 LOGIN_REDIRECT_URL = 'payments:item_list'
+LOGOUT_REDIRECT_URL = 'payments:item_list'
 
 RUB_TO_USD = 0.016
+
+CENT_TO_USD = 100
+
+PERCENT_TO_VALUE = 100

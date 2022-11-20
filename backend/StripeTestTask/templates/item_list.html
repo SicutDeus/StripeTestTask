@@ -1,4 +1,6 @@
-{% extends 'base.html' %} {% block title %}
+{% extends 'base.html' %} 
+{% load user_filters %}
+{% block title %}
   <title>Items list</title>
 {% endblock title %} {% block content %}
   <div class="card-group">
@@ -10,7 +12,13 @@
           </h1>
           <p class="card-text">{{ item.description }}</p>
           <h2 class="text-success">
-            {{ item.price }} {% if item.currency == "usd" %} $! {% endif %}
+            {% if item.discounts %}
+            <s class="text-secondary">{{ item.price }}</s>
+            {{ item.price | get_price_with_discount:item.discounts.percent_of_discount }}
+            {% else%}
+            {{ item.price }} 
+            {% endif %}
+            {% if item.currency == "usd" %} $! {% endif %}
             {% if item.currency == "rub" %} ₽! {% endif %}
           </h2>
           <h1>

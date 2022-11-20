@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.urls import reverse
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Currencies(models.TextChoices):
@@ -57,5 +58,26 @@ class Order(models.Model):
     def __str__(self) -> str:
         return f'Корзина {self.user.username}'
 
+    def get_absolute_url(self):
+        return reverse("order_detail", args=(self.pk,))
+
     class Meta:
         default_related_name = 'order'
+
+
+class Discount(models.Model):
+    item = models.OneToOneField(
+        Item,
+        on_delete=models.CASCADE,
+        verbose_name='скидка на товар',
+        related_name='discounts',
+        unique=True,
+    )
+    percent_of_discount = models.PositiveIntegerField(
+        validators=[
+            MaxValueValidator(75),
+            MinValueValidator(1)
+        ])
+
+    def __str__(self) -> str:
+        return f'Скидка {self.percent_of_discount}% на {self.item.name}'

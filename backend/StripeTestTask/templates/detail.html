@@ -1,4 +1,6 @@
-{% extends 'base.html' %} {% block title %}
+{% extends 'base.html' %} 
+{% load user_filters %}
+{% block title %}
   <title>Купить {{ item.name }}</title>
 {% endblock %} {% block content %}
   <div class="container">
@@ -16,7 +18,12 @@
               {% else %}
                 ₽
               {% endif %}
-              {{ item.price }}</h1>
+              {% if item.discounts %}
+              <s class="text-secondary">{{ item.price }}</s>
+              {{ item.price | get_price_with_discount:item.discounts.percent_of_discount }}
+              {% else%}
+              {{ item.price }} 
+              {% endif %}</h1>
             <ul class="list-unstyled mt-3 mb-4">
               {{ item.description }}
             </ul>
@@ -28,11 +35,7 @@
                 type="submit"
                 id="checkout-button"
               >
-                {% if item.currency == "usd" %}
-                  Купить за {{ item.price }} долларов!
-                {% else %}
-                  Купить за {{ item.price }} рублей!
-                {% endif %}
+                Купить
               </button>
             </form>
           </div>

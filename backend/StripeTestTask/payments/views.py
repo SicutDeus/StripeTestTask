@@ -5,7 +5,6 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
-
 from payments.models import Item, Order
 from payments.utils import get_order, get_user_cart
 
@@ -27,10 +26,11 @@ class CartView(LoginRequiredMixin, ListView):
 
 class CreateCheckoutSessionFromCartView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
+        print(self.request.META['HTTP_HOST'])
         items = get_user_cart(request.user)
         if len(items) == 0:
             return redirect('payments:item_list')
-        domain = 'http://127.0.0.1:8000'
+        domain = f'http://{self.request.META["HTTP_HOST"]}'
         checkout_session = stripe.checkout.Session.create(
             allow_promotion_codes=True,
             payment_method_types=['card'],
@@ -45,7 +45,7 @@ class CreateCheckoutSessionFromCartView(LoginRequiredMixin, View):
 class CreateCheckoutSessionView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         item = Item.objects.get(id=self.kwargs['pk'])
-        domain = 'http://127.0.0.1:8000'
+        domain = f'http://{self.request.META["HTTP_HOST"]}'
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=get_order((item,), item.currency),
@@ -57,7 +57,7 @@ class CreateCheckoutSessionView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         item = Item.objects.get(id=self.kwargs['pk'])
-        domain = 'http://127.0.0.1:8000'
+        domain = f'http://{self.request.META["HTTP_HOST"]}'
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=['card'],
             line_items=get_order((item,), item.currency),
