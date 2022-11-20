@@ -7,6 +7,7 @@ from django.views import View
 from django.views.generic import DetailView, ListView, TemplateView
 from payments.models import Item, Order
 from payments.utils import get_order, get_user_cart
+from django.http import JsonResponse
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -66,6 +67,21 @@ class CreateCheckoutSessionView(LoginRequiredMixin, View):
             cancel_url=domain + '/cancel/',
         )
         return redirect(checkout_session.url)
+
+
+class StripeIntentView(View):
+    def post(self, request, *args, **kwargs):
+        item = Item.objects.get(id=self.kwargs['pk'])
+        intent = stripe.PaymentIntent.create(
+            amount=item.price,
+            currency=item.currency,
+            automatic_payment_methods={
+                'enabled': True,
+            },
+        )
+        return JsonResponse({
+            'clientSecret': intent['client_secret']
+        })
 
 
 class ItemDetailView(LoginRequiredMixin, DetailView):

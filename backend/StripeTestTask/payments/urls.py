@@ -3,14 +3,16 @@ from django.urls import path
 from payments.views import (CancelView, CartView,
                             CreateCheckoutSessionFromCartView,
                             CreateCheckoutSessionView, ItemDetailView,
-                            ItemListView, SuccesView, add_item_to_cart,
-                            remove_from_cart)
+                            ItemListView, SuccesView, StripeIntentView,
+                            add_item_to_cart, remove_from_cart
+                            )
 
 app_name = 'payments'
 
 urlpatterns = [
     path('', ItemListView.as_view(), name='item_list'),
     path('buy/<int:pk>/', CreateCheckoutSessionView.as_view(), name='buy_item'),
+    path('buy/intent/<int:pk>', StripeIntentView.as_view(), name='buy_item_intent'),
     path('cancel/', CancelView.as_view(), name='cancel'),
     path('cart/', CartView.as_view(), name='cart'),
     path('cart/buy/', CreateCheckoutSessionFromCartView.as_view(),
