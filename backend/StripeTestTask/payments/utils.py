@@ -1,6 +1,5 @@
 from django.conf import settings
-
-from payments.models import Item, Order, Discount
+from payments.models import Discount, Item, Order
 
 
 def get_user_cart(user):
@@ -15,13 +14,15 @@ def get_order(items, currency):
     order_list = list()
     for item in items:
         if item.currency == 'rub' and currency == 'usd':
-            price = int(item.price * settings.CENT_TO_USD *
-                        settings.RUB_TO_USD)
+            price = int(item.price * settings.CENT_TO_USD
+                        * settings.RUB_TO_USD)
         else:
             price = int(item.price) * settings.CENT_TO_USD
         if Discount.objects.filter(item=item).exists():
-            price = int(price * item.discounts.percent_of_discount /
-                        settings.PERCENT_TO_VALUE)
+            price = int(
+                price * item.discounts.percent_of_discount
+                / settings.PERCENT_TO_VALUE,
+            )
         order_list.append(
             {
                 'price_data': {

@@ -3,7 +3,9 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-%8+41^4++y4&-=+!t!!@sqc4l3x3$1lw*2461rh3girvu)3k(&'
+SECRET_KEY = (
+    'django-insecure-%8+41^4++y4&-=+!t!!@sqc4l3x3$1lw*2461rh3girvu)3k(&'
+)
 
 DEBUG = True
 
@@ -55,7 +57,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    },
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -90,7 +92,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STRIPE_PUBLIC_KEY = 'pk_test_51M5QoOD4SjWl8tMgDSD3W9CaOk8Sd1a083qjG9ZNf9n0wCQo09Wui3s24aavREHid6dv0SD35taJukUFgp4qgvkK00wVIUPQdf'
 STRIPE_SECRET_KEY = 'sk_test_51M5QoOD4SjWl8tMg8uc6k2Y63pwNSHaCO9Q3ER7KHVVh999uroyO14xGmWOJPlf5D7fnDBueD7zVme5ZxQziltDP005gnDHlVS'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    'www.sicutdeus.pythonanywhere.com',
+    'sicutdeus.pythonanywhere.com',
+]
 
 INTERNAL_IPS = [
     '127.0.0.1',

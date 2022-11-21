@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.urls import reverse
-from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 class Currencies(models.TextChoices):
@@ -76,8 +76,12 @@ class Discount(models.Model):
     percent_of_discount = models.PositiveIntegerField(
         validators=[
             MaxValueValidator(75),
-            MinValueValidator(1)
+            MinValueValidator(1),
         ])
 
     def __str__(self) -> str:
         return f'Скидка {self.percent_of_discount}% на {self.item.name}'
+
+    class Meta:
+        verbose_name = 'Скидки'
+        verbose_name_plural = 'Скидки'

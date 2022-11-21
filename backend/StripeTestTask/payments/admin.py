@@ -1,13 +1,12 @@
 from django.contrib import admin
-
-from payments.models import Item, Discount
+from payments.models import Discount, Item
 
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'price', 'currency',)
+    list_display = ('name', 'description', 'price', 'currency')
 
 
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
-    list_display = ('item', 'percent_of_discount',)
+    list_display = ('item', 'percent_of_discount')
