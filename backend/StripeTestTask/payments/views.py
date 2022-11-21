@@ -19,6 +19,7 @@ class CartView(LoginRequiredMixin, ListView):
     template_name = 'item_list.html'
 
     def get_context_data(self, **kwargs):
+        print(settings.STRIPE_SECRET_KEY)
         context = super().get_context_data(**kwargs)
         context["iscart"] = True
         return context

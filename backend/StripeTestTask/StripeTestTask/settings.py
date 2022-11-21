@@ -1,11 +1,12 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = (
-    'django-insecure-%8+41^4++y4&-=+!t!!@sqc4l3x3$1lw*2461rh3girvu)3k(&'
-)
+SECRET_KEY = os.getenv('DJANGO_SECRT_KEY')
 
 DEBUG = True
 
@@ -90,7 +91,7 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STRIPE_PUBLIC_KEY = 'pk_test_51M5QoOD4SjWl8tMgDSD3W9CaOk8Sd1a083qjG9ZNf9n0wCQo09Wui3s24aavREHid6dv0SD35taJukUFgp4qgvkK00wVIUPQdf'
-STRIPE_SECRET_KEY = 'sk_test_51M5QoOD4SjWl8tMg8uc6k2Y63pwNSHaCO9Q3ER7KHVVh999uroyO14xGmWOJPlf5D7fnDBueD7zVme5ZxQziltDP005gnDHlVS'
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 
 ALLOWED_HOSTS = [
     '127.0.0.1',
