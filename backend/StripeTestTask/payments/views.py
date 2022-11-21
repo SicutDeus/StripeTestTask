@@ -37,15 +37,18 @@ class CreateCheckoutSessionFromCartView(LoginRequiredMixin, View):
         if len(items) == 0:
             return redirect('payments:item_list')
         domain = f'http://{self.request.META["HTTP_HOST"]}'
-        checkout_session = stripe.checkout.Session.create(
-            allow_promotion_codes=True,
-            payment_method_types=['card'],
-            line_items=get_order(items, 'usd'),
-            mode='payment',
-            success_url=domain + '/success/',
-            cancel_url=domain + '/cancel/',
-        )
-        return redirect(checkout_session.url)
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                allow_promotion_codes=True,
+                payment_method_types=['card'],
+                line_items=get_order(items, 'usd'),
+                mode='payment',
+                success_url=domain + '/success/',
+                cancel_url=domain + '/cancel/',
+            )
+            return redirect(checkout_session.url)
+        except Exception:
+            return redirect('payments:item_list')
 
 
 class CreateCheckoutSessionView(LoginRequiredMixin, View):
@@ -54,14 +57,17 @@ class CreateCheckoutSessionView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
         item = Item.objects.get(id=self.kwargs['pk'])
         domain = f'http://{self.request.META["HTTP_HOST"]}'
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types=['card'],
-            line_items=get_order((item,), item.currency),
-            mode='payment',
-            success_url=domain + '/success/',
-            cancel_url=domain + '/cancel/',
-        )
-        return redirect(checkout_session.url)
+        try:
+            checkout_session = stripe.checkout.Session.create(
+                payment_method_types=['card'],
+                line_items=get_order((item,), item.currency),
+                mode='payment',
+                success_url=domain + '/success/',
+                cancel_url=domain + '/cancel/',
+            )
+            return redirect(checkout_session.url)
+        except Exception:
+            return redirect('payments:item_list')
 
     def get(self, request, *args, **kwargs):
         self.post(self, request, *args, **kwargs)
@@ -72,16 +78,19 @@ class StripeIntentView(View):
 
     def post(self, request, *args, **kwargs):
         item = Item.objects.get(id=self.kwargs['pk'])
-        intent = stripe.PaymentIntent.create(
-            amount=item.price,
-            currency=item.currency,
-            automatic_payment_methods={
-                'enabled': True,
-            },
-        )
-        return JsonResponse({
-            'clientSecret': intent['client_secret'],
-        })
+        try:
+            intent = stripe.PaymentIntent.create(
+                amount=item.price,
+                currency=item.currency,
+                automatic_payment_methods={
+                    'enabled': True,
+                },
+            )
+            return JsonResponse({
+                'clientSecret': intent['client_secret'],
+            })
+        except Exception:
+            return redirect('payments:item_list')
 
 
 class ItemDetailView(LoginRequiredMixin, DetailView):
